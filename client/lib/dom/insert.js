@@ -3,7 +3,7 @@ function insertBefore(node, text) {
 
   if (node.nodeType !== document.ELEMENT_NODE) {
     throw new ReferenceError(
-      'insertBefore 함수의 첫 번째 인수는 ELEMENT NODE 이어야 합니다.'
+      'insertBefore 함수의 첫 번째 인수는 ELEMENT NODE이어야 합니다.'
     );
   }
   node.insertAdjacentHTML('beforebegin', text);
@@ -14,7 +14,7 @@ function insertFirst(node, text) {
 
   if (node.nodeType !== document.ELEMENT_NODE) {
     throw new ReferenceError(
-      'insertFirst 함수의 첫 번째 인수는 ELEMENT NODE 이어야 합니다.'
+      'insertFirst 함수의 첫 번째 인수는 ELEMENT NODE이어야 합니다.'
     );
   }
   node.insertAdjacentHTML('afterbegin', text);
@@ -25,7 +25,7 @@ function insertLast(node, text) {
 
   if (node.nodeType !== document.ELEMENT_NODE) {
     throw new ReferenceError(
-      'insertLast 함수의 첫 번째 인수는 ELEMENT NODE 이어야 합니다.'
+      'insertLast 함수의 첫 번째 인수는 ELEMENT NODE이어야 합니다.'
     );
   }
   node.insertAdjacentHTML('beforeend', text);
@@ -36,7 +36,7 @@ function insertAfter(node, text) {
 
   if (node.nodeType !== document.ELEMENT_NODE) {
     throw new ReferenceError(
-      'insertAfter 함수의 첫 번째 인수는 ELEMENT NODE 이어야 합니다.'
+      'insertAfter 함수의 첫 번째 인수는 ELEMENT NODE이어야 합니다.'
     );
   }
   node.insertAdjacentHTML('afterend', text);
