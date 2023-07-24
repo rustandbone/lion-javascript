@@ -1,3 +1,5 @@
+import {} from '../../../node_modules/gsap/index.js';
+
 /* global gsap */
 
 export const shake = gsap.to('form', {
