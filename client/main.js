@@ -1,73 +1,110 @@
-import { jujeobData } from './data/data.js';
 import {
-  addClass,
+  attr,
   clearContents,
+  diceAnimation,
+  endScroll,
   getNode,
-  getRandom,
+  getNodes,
   insertLast,
-  isNumericString,
-  removeClass,
-  showAlert,
-  shake,
-  copy,
 } from './lib/index.js';
 
-const submit = getNode('#submit');
-const nameField = getNode('#nameField');
-const resultArea = getNode('.result');
-
+// diceAnimation();
 // [phase-1]
-// 1. 주접 떨기 버튼을 클릭할 수 있는 핸들러를 연결
-// 2. nameField에 있는 값을 가져오기
-// 3. jujeob 데이터 가져오기
-// 4. jujeobData에서 랜덤한 주접 한 개를 가져오기
-// 5. pick 항목을 result에 랜더링
+// 1. dice animation 불러오기
+// 2. 주사위 굴리기 버튼을 클릭하면 diceAnimation이 실행될 수 있도록
+//    - 주사위 굴리기 버튼 가져오기
+//    - 이벤트 핸들러 연결
+//    - 애니메이션 코드 작성
+// 3. 애니메이션 토글 제어
+// 4. 클로저 + IIFE 를 사용한 변수 보호
 
-// [phase-2]
-// 1. 아무 값도 입력 받지 못했을 때 예외처리
-// 2. 공백 문자를 받았을 때 예외처리 replace => regEXP
-// 3. 숫자형 문자를 받았을 때 (e.g  123, 기안84)
+// [phase-2] 레코드 리스트 control / view
+// 1. 주사위가 멈추면 기록/초기화 버튼 활성화
+// 2. hidden 속성 제어하기
+//    - 기록 버튼 이벤트 바인딩
+//    - hidden 속성 false 만들기
+//    - 초기화 버튼 이벤트 바인딩
+//    - hidden 속성 true 만들기
+// 3. 주사위 값을 가져와서 렌더링
+// 4. 스크롤 위치 내리기
+// 5. 함수 분리
 
-// [phase-3]
-// 1. 잘못된 정보를 입력 받으면 사용자에게 알려주기
-// 2. 재사용 가능한 함수 (showAlert)
-// 3. gsap shake 기능 구현
-// 4. animation 모듈화
+// [phase-3] 초기화 시키기
 
-// [phase-4]
-// 1. result 클릭 이벤트 바인딩
+const [startButton, recordButton, resetButton] = getNodes(
+  '.buttonGroup > button'
+);
+const recordListWrapper = getNode('.recordListWrapper');
+const tbody = getNode('.recordList tbody');
 
-function handleSubmit(e) {
-  e.preventDefault();
+const handleRollingDice = ((e) => {
+  let isClicked = false;
+  let stopAnimation;
 
-  let name = nameField.value;
-  const list = jujeobData(name);
-  const pick = list[getRandom(list.length)];
+  return () => {
+    if (!isClicked) {
+      //주사위 play
+      console.log('첫 번째 클릭');
+      stopAnimation = setInterval(diceAnimation, 100);
+      recordButton.disabled = true;
+      resetButton.disabled = true;
+    } else {
+      //주사위 stop
+      console.log('두 번쨰 클릭');
+      clearInterval(stopAnimation);
+      recordButton.disabled = false;
+      resetButton.disabled = false;
+    }
+    isClicked = !isClicked;
+  };
+})();
 
-  if (!name || name.replace(/\s*/g, '') === '') {
-    console.log('이름이 없어요!');
-    showAlert('.alert-error', '이름을 입력해주세요!', 2000);
-    shake.restart();
-    return;
-  }
+let count = 1;
+let total = 0;
 
-  if (!isNumericString(name)) {
-    console.log('숫자 타입입니다.');
-    showAlert('.alert-error', '제대로 된 이름을 입력해주세요!', 2000);
-    shake.restart();
-    return;
-  }
-
-  clearContents(resultArea);
-  insertLast(resultArea, pick);
+function createItem(value) {
+  return /* html */ `
+    <tr>
+      <td>${count++}</td>
+      <td>${value}</td>
+      <td>${(total += value)}</td>
+    </tr>
+  `;
 }
 
-function handleCopy() {
-  const text = resultArea.textContent;
-  copy(text).then(() => {
-    showAlert('.alert-success', '클립보드 복사 완료');
-  });
+function renderRecordItem() {
+  //주사위의 data-dice 값 가져오기
+  const diceValue = +attr('#cube', 'data-dice');
+
+  insertLast(tbody, createItem(diceValue));
+  recordButton.disabled = true;
+  endScroll(recordListWrapper);
 }
 
-submit.addEventListener('click', handleSubmit);
-resultArea.addEventListener('click', handleCopy);
+function handleRecord() {
+  recordListWrapper.hidden = false;
+
+  renderRecordItem();
+}
+
+function handleReset() {
+  recordListWrapper.hidden = true;
+  recordButton.disabled = true;
+  resetButton.disabled = true;
+
+  clearContents(tbody);
+  count = 1;
+  total = 0;
+}
+
+startButton.addEventListener('click', handleRollingDice);
+recordButton.addEventListener('click', handleRecord);
+resetButton.addEventListener('click', handleReset);
+
+// disableElement(node)
+// enableElement(node)
+// isDisableState(node) => true / false
+
+// visibleElement(node)
+// invisibleElement(node)
+// isVisibleState(node) => true / false
