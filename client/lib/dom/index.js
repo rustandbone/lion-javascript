@@ -5,3 +5,4 @@ export * from './css.js';
 export * from './getNode.js';
 export * from './insert.js';
 export * from './showAlert.js';
+export * from './endScroll.js';
