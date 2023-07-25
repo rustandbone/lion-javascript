@@ -6,6 +6,7 @@ import {
   getNode,
   getNodes,
   insertLast,
+  memo,
 } from './lib/index.js';
 
 // diceAnimation();
@@ -30,12 +31,15 @@ import {
 // 5. 함수 분리
 
 // [phase-3] 초기화 시키기
+// 1. 아이템 지우기
 
 const [startButton, recordButton, resetButton] = getNodes(
   '.buttonGroup > button'
 );
 const recordListWrapper = getNode('.recordListWrapper');
 const tbody = getNode('.recordList tbody');
+memo('@tbody', () => getNode('.recordList tbody')); //setter
+memo('@tbody'); //getter
 
 const handleRollingDice = ((e) => {
   let isClicked = false;
@@ -76,7 +80,7 @@ function renderRecordItem() {
   //주사위의 data-dice 값 가져오기
   const diceValue = +attr('#cube', 'data-dice');
 
-  insertLast(tbody, createItem(diceValue));
+  insertLast(memo('@tbody'), createItem(diceValue));
   recordButton.disabled = true;
   endScroll(recordListWrapper);
 }
@@ -92,7 +96,7 @@ function handleReset() {
   recordButton.disabled = true;
   resetButton.disabled = true;
 
-  clearContents(tbody);
+  clearContents(memo('@tbody'));
   count = 1;
   total = 0;
 }
