@@ -1,4 +1,4 @@
-import { attr } from '../dom/attr.js';
+/* import { attr } from '../dom/attr.js';
 import { getNode } from '../dom/getNode.js';
 import { gsap } from '../../../node_modules/gsap/index.js';
 import { memo } from '../utils/memo.js';
@@ -40,3 +40,4 @@ export function diceAnimation() {
     onComplete: complete,
   });
 }
+ */
