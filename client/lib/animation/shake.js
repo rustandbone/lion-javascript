@@ -1,12 +1,12 @@
-import {} from '../../../node_modules/gsap/index.js';
+// import {} from '../../../node_modules/gsap/index.js';
 
 /* global gsap */
 
-export const shake = gsap.to('form', {
-  duration: 0.1,
-  x: -10,
-  repeat: 5,
-  yoyo: true,
-  clearProp: 'x',
-  paused: true,
-});
+// export const shake = gsap.to('form', {
+//   duration: 0.1,
+//   x: -10,
+//   repeat: 5,
+//   yoyo: true,
+//   clearProp: 'x',
+//   paused: true,
+// });
